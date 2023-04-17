@@ -46,22 +46,6 @@ export default function Details() {
   return (
     <div className="flex flex-col gap-4 mt-8">
       <button
-        onClick={() => setShowVega((s) => !s)}
-        className="flex items-center gap-2 underline text-slate-800 hover:text-slate-700"
-      >
-        {showVega ? (
-          <ChevronUpIcon aria-hidden className="w-5 h-5" />
-        ) : (
-          <ChevronDownIcon aria-hidden className="w-5 h-5" />
-        )}
-        Vega Chart
-      </button>
-      <div
-        id="vega-container"
-        ref={vegaRef}
-        className={` ${showVega ? "visible" : "hidden"}`}
-      />
-      <button
         onClick={() => setShowTree((s) => !s)}
         className="flex items-center gap-2 underline text-slate-800 hover:text-slate-700"
       >
@@ -76,6 +60,22 @@ export default function Details() {
         id="olli-container"
         ref={olliRef}
         className={` prose ${showTree ? "visible" : "hidden"}`}
+      />
+      <button
+        onClick={() => setShowVega((s) => !s)}
+        className="flex items-center gap-2 underline text-slate-800 hover:text-slate-700"
+      >
+        {showVega ? (
+          <ChevronUpIcon aria-hidden className="w-5 h-5" />
+        ) : (
+          <ChevronDownIcon aria-hidden className="w-5 h-5" />
+        )}
+        Vega Chart
+      </button>
+      <div
+        id="vega-container"
+        ref={vegaRef}
+        className={` ${showVega ? "visible" : "hidden"}`}
       />
     </div>
   );

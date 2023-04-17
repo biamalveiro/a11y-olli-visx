@@ -30,8 +30,8 @@ export default function Home() {
                   Olli
                 </a>{" "}
                 to generate an accessible text structure for a chart. The
-                rendering of the chart is completely independent from the usage
-                of Olli, in this case we build the chart with{" "}
+                rendering of the chart is completely independent of the usage of
+                Olli, in this case, we build the chart with{" "}
                 <a href="https://airbnb.io/visx" target="_blank">
                   visx
                 </a>

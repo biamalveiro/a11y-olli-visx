@@ -6,27 +6,31 @@ import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 import { VegaLiteAdapter } from "olli-adapters";
 import { View, Warn, parse } from "vega";
 import data from "vega-datasets";
-import { compile } from "vega-lite";
+import { compile, TopLevelSpec } from "vega-lite";
+import { useOlli } from "@/hooks/useOlli";
 
 export default function Details() {
-  const olliRef = React.useRef<HTMLDivElement>(null);
-  const vegaRef = React.useRef<HTMLDivElement>(null);
-  const [dataset, setDataset] = React.useState<any[]>([]);
   const [showTree, setShowTree] = React.useState(false);
   const [showVega, setShowVega] = React.useState(false);
+
+  const [spec, setSpec] = React.useState<TopLevelSpec>();
+  const [dataset, setDataset] = React.useState<any[]>([]);
+
+  const vegaRef = React.useRef<HTMLDivElement>(null);
+  const olliRef = useOlli(spec);
 
   React.useEffect(() => {
     const fetchData = async () => {
       const penguins = await data["penguins.json"]();
       setDataset(penguins);
+      setSpec(penguinSpec(penguins));
     };
 
     fetchData();
   }, []);
 
   React.useEffect(() => {
-    if (!olliRef.current || !vegaRef.current) return;
-    const spec = penguinSpec(dataset);
+    if (!olliRef.current || !vegaRef.current || !spec) return;
     const vegaSpec = compile(spec).spec;
     const runtime = parse(vegaSpec);
 
@@ -36,12 +40,7 @@ export default function Details() {
       .renderer("svg")
       .hover()
       .run();
-
-    VegaLiteAdapter(spec).then((olliVisSpec: OlliVisSpec) => {
-      const olliRender = olli(olliVisSpec);
-      olliRef.current?.replaceChildren(olliRender);
-    });
-  }, [dataset]);
+  }, [dataset, spec]);
 
   return (
     <div className="flex flex-col gap-4 mt-8">
@@ -57,7 +56,6 @@ export default function Details() {
         Olli Tree
       </button>
       <div
-        id="olli-container"
         ref={olliRef}
         className={` prose ${showTree ? "visible" : "hidden"}`}
       />
